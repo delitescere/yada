@@ -36,17 +36,22 @@ https://github.com/plumatic[Plumatic]'s
 https://github.com/plumatic/schema[schema] library. This allows us to
 get quite sophisticated in how we define parameters.
 
+We can also declare optional parameter keys using schema so that these
+parameters can be missing from a request without generating a 400 response.
+
 [source,clojure]
 ----
-(require [schema.core :refer (defschema)]
+(require [schema.core :refer (defschema) :as schema])
 
 (defschema Transaction
   {:payee String
    :description String
-   :amount Double}
+   :amount Double})
+
 
 {:parameters {:path {:entry Long}}
- :methods {:get {:parameters {:query {:since String}}}
+ :methods {:get {:parameters {:query {:since String
+                                      (schema/optional-key :page) schema/Int}}}
            :post {:parameters {:body Transaction}}}
 ----
 
